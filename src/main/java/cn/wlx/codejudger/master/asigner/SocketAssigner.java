@@ -27,6 +27,7 @@ public class SocketAssigner implements ITaskAssigner {
   @Override
   public void registerNode(JudgeNodeInfo judgeNodeInfo) {
     nodeQueue.offer(new SortNode(judgeNodeInfo));
+    runningTaskMap.put(judgeNodeInfo, 0);
   }
 
   /**

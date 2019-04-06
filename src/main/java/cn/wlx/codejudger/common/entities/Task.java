@@ -6,13 +6,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class Task {
 
-  public int taskId;
+  public int solutionId;
   public int problemId;
   public String code;
   public CodeLanguage language;
 
   @Override
   public String toString() {
-    return String.format("Task(id=%d, pid=%d, lang=%s)", taskId, problemId, language);
+    return String.format("Task(id=%d, pid=%d, lang=%s)", solutionId, problemId, language);
   }
 }

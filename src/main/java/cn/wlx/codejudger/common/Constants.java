@@ -7,4 +7,5 @@ public class Constants {
   public static final String DEFAULT_CHARSET = "utf-8";
   public static final int MASTER_PORT = 59090;
   public static final int NODE_MANAGER_PORT = 59091;
+  public static final String NODE_MANAGER_TMP_SOURCE_DIR = "/tmp/tmp_source";
 }

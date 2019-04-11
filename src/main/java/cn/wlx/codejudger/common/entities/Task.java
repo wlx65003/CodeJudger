@@ -8,6 +8,8 @@ public class Task {
 
   public int solutionId;
   public int problemId;
+  public int timeLimitMs;
+  public int memoryLimitKB;
   public String code;
   public CodeLanguage language;
 

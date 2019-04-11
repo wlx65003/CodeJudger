@@ -1,7 +1,7 @@
 package cn.wlx.codejudger.master.asigner;
 
 import cn.wlx.codejudger.common.entities.JudgeNodeInfo;
-import cn.wlx.codejudger.common.entities.JudgeResult;
+import cn.wlx.codejudger.common.entities.JudgeReport;
 import cn.wlx.codejudger.common.entities.Task;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class MockAssigner implements ITaskAssigner {
   }
 
   @Override
-  public void reportResult(JudgeResult judgeResult) {
+  public void reportResult(JudgeReport judgeReport) {
 
   }
 }

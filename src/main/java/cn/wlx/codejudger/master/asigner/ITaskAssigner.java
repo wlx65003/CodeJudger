@@ -1,7 +1,7 @@
 package cn.wlx.codejudger.master.asigner;
 
 import cn.wlx.codejudger.common.entities.JudgeNodeInfo;
-import cn.wlx.codejudger.common.entities.JudgeResult;
+import cn.wlx.codejudger.common.entities.JudgeReport;
 import cn.wlx.codejudger.common.entities.Task;
 
 public interface ITaskAssigner {
@@ -10,5 +10,5 @@ public interface ITaskAssigner {
 
   void assign(Task task);
 
-  void reportResult(JudgeResult judgeResult);
+  void reportResult(JudgeReport judgeReport);
 }

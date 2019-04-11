@@ -66,7 +66,7 @@ public class MasterTest {
 
     // send some report to master
     int taskNum = 10;
-    Task task = new Task(0, 0, "xxx", CodeLanguage.CPP);
+    Task task = new Task(0, 0, 0, 0, "xxx", CodeLanguage.CPP);
     Gson gson = new Gson();
     Request request = new Request(RequestType.NODE_REPORT, gson.toJson(task));
     for (int i = 0; i < taskNum; ++i) {
@@ -92,7 +92,7 @@ public class MasterTest {
 
     // send some node_register request to master
     int nodeNum = 10;
-    JudgeNodeInfo judgeNodeInfo = new JudgeNodeInfo("xxx", 0, -1);
+    JudgeNodeInfo judgeNodeInfo = new JudgeNodeInfo(-1, "xxx", 0, -1);
     Gson gson = new Gson();
     Request request = new Request(RequestType.NODE_REGISTER, gson.toJson(judgeNodeInfo));
     for (int i = 0; i < nodeNum; ++i) {
@@ -103,5 +103,32 @@ public class MasterTest {
     Assert.assertEquals(mockAssigner.getNodeCnt(), nodeNum);
 
     master.stop();
+  }
+
+  @Test
+  public void testGsonConstructor() {
+    long a = System.currentTimeMillis();
+    Gson gson = new Gson();
+    long b = System.currentTimeMillis();
+    LOG.info("cost: {} ms", b - a);
+  }
+
+  @Test
+  public void testThread() {
+    LOG.info("isDaemon: {}.", Thread.currentThread().isDaemon());
+    Thread t = new Thread(() -> {
+      LOG.info("isDaemon: {}.", Thread.currentThread().isDaemon());
+      while (true) {
+        LOG.info("hello");
+        try {
+          Thread.sleep(1000);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    });
+
+    t.start();
+    LOG.info("main exit.");
   }
 }

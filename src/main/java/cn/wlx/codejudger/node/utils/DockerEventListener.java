@@ -1,4 +1,4 @@
-package cn.wlx.codejudger.node.docker;
+package cn.wlx.codejudger.node.utils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -13,7 +13,7 @@ public class DockerEventListener {
   private final static Logger LOG = LoggerFactory.getLogger(DockerEventListener.class);
   private Thread listenThread;
   private boolean stop = false;
-  private ConcurrentMap<String, Boolean> oomRecord = new ConcurrentHashMap();
+  private ConcurrentMap<String, Boolean> oomRecord = new ConcurrentHashMap<>();
 
   public boolean hasOOM(String containerName) {
     // sleep for some time to ensure record has appeared
@@ -48,7 +48,7 @@ public class DockerEventListener {
         if (eventObj.has("status")) {
           String status = eventObj.getAsJsonPrimitive("status").getAsString();
           // get oom log
-          if (status.equals("oom")) {
+          if ("oom".equals(status)) {
             String containerName =
                 eventObj.getAsJsonObject("Actor")
                     .getAsJsonObject("Attributes")
@@ -62,7 +62,11 @@ public class DockerEventListener {
       }
     }
 
-    LOG.info("docker event listener stopped.");
+    if (stop) {
+      LOG.info("docker event listener stopped.");
+    } else {
+      LOG.info("docker event listener stopped. because docker event process exit.");
+    }
   }
 
   public void start() {
@@ -71,7 +75,13 @@ public class DockerEventListener {
   }
 
   public void stop() {
+    LOG.info("try to stop DockerEventListener.");
     stop = true;
     listenThread.interrupt();
+    try {
+      listenThread.join();
+    } catch (Exception e) {
+      LOG.error("stop DockerEventListener failed.", e);
+    }
   }
 }

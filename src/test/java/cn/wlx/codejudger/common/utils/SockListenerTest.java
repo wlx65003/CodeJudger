@@ -22,6 +22,7 @@ public class SockListenerTest {
     sockListener.startListen(PORT, socket -> {
       try {
         String input = IOUtils.toString(socket.getInputStream(), "utf-8");
+        System.out.println("oh oh!");
         LOG.info("got request, content={}.", input);
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         out.println(String.format(
@@ -48,16 +49,27 @@ public class SockListenerTest {
     Thread.sleep(2000);
 
     // send some data to server
-    try(Socket socket = new Socket("127.0.0.1", PORT)) {
+    try (Socket socket = new Socket("127.0.0.1", PORT)) {
+      try (Socket socket2 = new Socket("127.0.0.1", PORT)) {
+        OutputStreamWriter writer = new OutputStreamWriter(socket2.getOutputStream());
+        String code = new String(new char[100000]);
+        Task task = new Task(1, 0, 0, 0, code, CodeLanguage.CPP);
+        Gson gson = new Gson();
+        gson.toJson(task, writer);
+        writer.flush();
+      } catch (Exception e) {
+        LOG.error("err", e);
+      }
+      Thread.sleep(1000);
       OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
-      String code = new String(new char[10000000]);
-      Task task = new Task(0, 0, code, CodeLanguage.CPP);
+      String code = new String(new char[1000]);
+      Task task = new Task(0, 0, 0, 0, code, CodeLanguage.CPP);
       Gson gson = new Gson();
       gson.toJson(task, writer);
       writer.flush();
     } catch (Exception e) {
       LOG.error("err", e);
     }
-    Thread.sleep(2000);
+    Thread.sleep(4000);
   }
 }

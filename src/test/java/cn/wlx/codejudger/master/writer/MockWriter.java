@@ -1,6 +1,6 @@
 package cn.wlx.codejudger.master.writer;
 
-import cn.wlx.codejudger.common.entities.JudgeResult;
+import cn.wlx.codejudger.common.entities.JudgeReport;
 import lombok.Getter;
 
 public class MockWriter implements IJudgeResultWriter {
@@ -9,7 +9,7 @@ public class MockWriter implements IJudgeResultWriter {
   private int cnt = 0;
 
   @Override
-  public void write(JudgeResult judgeResult) {
+  public void write(JudgeReport judgeReport) {
     cnt++;
   }
 }

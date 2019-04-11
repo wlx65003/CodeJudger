@@ -1,7 +1,7 @@
 package cn.wlx.codejudger.master.asigner;
 
 import cn.wlx.codejudger.common.entities.JudgeNodeInfo;
-import cn.wlx.codejudger.common.entities.JudgeResult;
+import cn.wlx.codejudger.common.entities.JudgeReport;
 import cn.wlx.codejudger.common.entities.Task;
 import com.google.gson.Gson;
 import java.io.OutputStreamWriter;
@@ -17,7 +17,8 @@ public class SocketAssigner implements ITaskAssigner {
   private static final Logger LOG = LoggerFactory.getLogger(SocketAssigner.class);
   private Gson gson = new Gson();
   private BlockingQueue<SortNode> nodeQueue = new PriorityBlockingQueue<>();
-  private HashMap<JudgeNodeInfo, Integer> runningTaskMap = new HashMap<>();
+  // nodeId -> taskNum
+  private HashMap<Integer, Integer> runningTaskMap = new HashMap<>();
 
   /**
    * this method will be called by Master's listener thread, which will add a new judgeNode.
@@ -27,7 +28,7 @@ public class SocketAssigner implements ITaskAssigner {
   @Override
   public void registerNode(JudgeNodeInfo judgeNodeInfo) {
     nodeQueue.offer(new SortNode(judgeNodeInfo));
-    runningTaskMap.put(judgeNodeInfo, 0);
+    runningTaskMap.put(judgeNodeInfo.nodeID, 0);
   }
 
   /**
@@ -35,10 +36,10 @@ public class SocketAssigner implements ITaskAssigner {
    * running task count.
    */
   @Override
-  public void reportResult(JudgeResult judgeResult) {
-    int runningTaskNum = runningTaskMap.getOrDefault(judgeResult.judgeNodeInfo, 0);
+  public void reportResult(JudgeReport judgeReport) {
+    int runningTaskNum = runningTaskMap.getOrDefault(judgeReport.nodeId, 0);
     runningTaskNum = Math.max(0, runningTaskNum - 1);
-    runningTaskMap.put(judgeResult.judgeNodeInfo, runningTaskNum);
+    runningTaskMap.put(judgeReport.nodeId, runningTaskNum);
   }
 
   /**
@@ -58,7 +59,7 @@ public class SocketAssigner implements ITaskAssigner {
       out.flush();
       // update node queue
       int curRunningTaskNum = runningTaskMap.getOrDefault(node.judgeNodeInfo, 0);
-      runningTaskMap.put(node.judgeNodeInfo, curRunningTaskNum + 1);
+      runningTaskMap.put(node.judgeNodeInfo.nodeID, curRunningTaskNum + 1);
       nodeQueue.offer(node);
     } catch (Exception e) {
       LOG.error("exception occurred when assigning task.", e);

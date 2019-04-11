@@ -2,7 +2,7 @@ package cn.wlx.codejudger.master;
 
 import cn.wlx.codejudger.common.Constants;
 import cn.wlx.codejudger.common.entities.JudgeNodeInfo;
-import cn.wlx.codejudger.common.entities.JudgeResult;
+import cn.wlx.codejudger.common.entities.JudgeReport;
 import cn.wlx.codejudger.common.entities.Request;
 import cn.wlx.codejudger.common.entities.Task;
 import cn.wlx.codejudger.common.utils.SockListener;
@@ -77,9 +77,9 @@ public class Master {
         switch (request.requestType) {
           // judge node finish task and report
           case NODE_REPORT:
-            JudgeResult judgeResult = gson.fromJson(request.contents, JudgeResult.class);
-            taskAssigner.reportResult(judgeResult);
-            judgeResultWriter.write(judgeResult);
+            JudgeReport judgeReport = gson.fromJson(request.contents, JudgeReport.class);
+            taskAssigner.reportResult(judgeReport);
+            judgeResultWriter.write(judgeReport);
             break;
 
           // new node added and send register request
@@ -119,7 +119,7 @@ public class Master {
       sockListener.stopListen();
       // interrupt blocking queue
       assignerThread.interrupt();
-
+      
       fetcherThread.join();
       assignerThread.join();
       listenerThread.join();

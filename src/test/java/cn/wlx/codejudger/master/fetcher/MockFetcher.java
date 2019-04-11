@@ -21,7 +21,7 @@ public class MockFetcher implements ITaskFetcher {
       return null;
     }
     String code = "xxx";
-    Task task = new Task(0, 0, code, CodeLanguage.CPP);
+    Task task = new Task(0, 0, 0, 0, code, CodeLanguage.CPP);
     Random random = new Random();
     int len = random.nextInt(Math.min(10, taskNum - cnt));
     if (len == 0) {

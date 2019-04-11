@@ -1,8 +1,8 @@
 package cn.wlx.codejudger.master.writer;
 
-import cn.wlx.codejudger.common.entities.JudgeResult;
+import cn.wlx.codejudger.common.entities.JudgeReport;
 
 public interface IJudgeResultWriter {
 
-  void write(JudgeResult judgeResult);
+  void write(JudgeReport judgeReport);
 }
